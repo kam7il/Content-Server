@@ -1,31 +1,10 @@
 import sys
-
-from flask import Flask, send_from_directory
 import os
 import argparse
 
-import socket
+from flask import Flask, send_from_directory
 
-def get_ip():
-    hostname = socket.gethostname()
-    ip_addr = socket.gethostbyname(hostname)
-    return ip_addr
-
-def get_pwd():
-    # get the current working directory
-    current_working_directory = os.getcwd()
-    return current_working_directory
-
-def is_path_valid(path):
-    try:
-        # Check if path exist
-        if os.path.exists(path):
-            return True
-        else:
-            return False
-    except Exception as e:
-        print(f"Error: {e}")
-        return False
+from auxiliary_functions import get_ip, get_pwd, is_path_valid
 
 def port_range(value):
     if not value.isdigit():
@@ -36,7 +15,7 @@ def port_range(value):
     raise argparse.ArgumentTypeError(f"Port number must be in the range 49152-65535. Provided: {value}")
 
 # argument parser
-parser = argparse.ArgumentParser(description='Local content server')
+parser = argparse.ArgumentParser(description='Local HTTP content server for Windows machines')
 parser.add_argument('-ph', '--path',
                     required=False,
                     default="Current",
@@ -44,8 +23,9 @@ parser.add_argument('-ph', '--path',
                     help='Set path with content or use current working directory')
 parser.add_argument('-ip', '--interface',
                     required=False,
-                    default="hostIP",
+                    default="all",
                     type=str,
+                    # hostIP issue, it is possible that it will select the ip address of a non-connected network interface
                     choices=['hostIP', 'localhost', 'all'],
                     help='On which network interface should the server be available?')
 parser.add_argument('-p', '--port',

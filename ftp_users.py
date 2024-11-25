@@ -1,6 +1,6 @@
 ftp_users = {
     "viewer": {
         'password': 'secretPassword',
-        'permissions': 'elr'
+        'permissions': 'elr' # only read rights
     }
 }
